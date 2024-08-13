@@ -1,0 +1,15 @@
+.root-layout{
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-height: 100%;
+    background-color: #EDF2F7;
+    min-height: 100vh;
+    height: 100%;
+}
+
+@media (max-width: 500px) and (min-width: 300px) {
+    .root-layout{
+        background: url('../../../shared/assets/back.svg');
+    }
+}
