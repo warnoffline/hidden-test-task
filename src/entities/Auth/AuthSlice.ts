@@ -1,5 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { auth, listOfUsersSession } from "./actions";
+import { encryptToken } from "@/shared/lib";
+
+
+const ENCRYPTED_REFRESH_KEY = import.meta.env.VITE_ENCRYPTED_REFRESH_TOKEN_KEY;
+const ACCESS_KEY = import.meta.env.VITE_ACCESS_TOKEN_KEY;
+const IV_KEY = import.meta.env.VITE_IV_KEY;
+const SALT_KEY = import.meta.env.VITE_SALT_KEY;
 
 type authState = {
     isAuth: boolean;
@@ -23,8 +30,10 @@ export const authSlice = createSlice({
             state.isAuth = false;
             state.userId = null;
             localStorage.removeItem('isAuth')
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
+            localStorage.removeItem(ACCESS_KEY);
+            localStorage.removeItem(ENCRYPTED_REFRESH_KEY);
+            localStorage.removeItem(SALT_KEY);
+            localStorage.removeItem(IV_KEY);
             localStorage.removeItem('userId')
             localStorage.removeItem('email')
         }
@@ -53,8 +62,10 @@ export const authSlice = createSlice({
             state.isLoading = false;
             state.isAuth = true;
             localStorage.setItem('isAuth', 'true')
-            localStorage.setItem('access_token', action.payload.auth_token)
-            localStorage.setItem('refresh_token', action.payload.refresh_token)
+            localStorage.setItem(ACCESS_KEY, action.payload.auth_token)
+            encryptToken(action.payload.refresh_token, action.payload.auth_token).then((encryptedToken) => {
+                localStorage.setItem(ENCRYPTED_REFRESH_KEY, encryptedToken)
+            })
         })
         
         .addCase(listOfUsersSession.pending, (state) => {
@@ -76,6 +87,7 @@ export const authSlice = createSlice({
             }
         })
         .addCase(listOfUsersSession.fulfilled, (state, action) => {
+            state.isLoading = false;
             console.log(action.payload.sessions[0].user_id)
             const userId = action.payload.sessions[0].user_id
             state.userId = userId;

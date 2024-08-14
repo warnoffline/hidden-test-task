@@ -28,13 +28,8 @@ export const auth = createAsyncThunk(
 export const listOfUsersSession = createAsyncThunk(
     '/auth/session-list/',
     async (_, {rejectWithValue}) => {
-        const  access_token = localStorage.getItem('access_token')
         try{
-            const response = await apiClient.get<SessionsType>('/auth/session-list/',{
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },   
-            })
+            const response = await apiClient.get<SessionsType>('/auth/session-list/')
             return response.data;
         } catch(e:unknown){
             if(axios.isAxiosError(e)){

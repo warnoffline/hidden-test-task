@@ -7,12 +7,7 @@ export const getUserById = createAsyncThunk(
     '/user/',
     async (user_id: string,  {rejectWithValue}) => {
         try{
-            const access_token = localStorage.getItem('access_token')
-            const response = await apiClient.get<UserType>(`/user/${user_id}/`, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`, 
-                },  
-            })
+            const response = await apiClient.get<UserType>(`/user/${user_id}/`)
             return response.data;
         } catch(e:unknown){
             if(axios.isAxiosError(e)){
