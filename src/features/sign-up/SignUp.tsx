@@ -14,7 +14,7 @@ export function SignUp({
 }) {
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { regMessage, regError, isLoading } = useAppSelector(
+  const { regError, isLoading } = useAppSelector(
     (state) => state.registrationReducer
   );
   const form = useForm<RegParams>({
@@ -33,7 +33,10 @@ export function SignUp({
     },
   });
   const handleSubmit = async (data: RegParams) => {
-    await dispatch(registration(data));
+    const response = await dispatch(registration(data));
+    if(response.meta.requestStatus === 'fulfilled'){
+      setIsConfirm(true);
+    }
     localStorage.setItem("email", data.email);
     form.reset();
   };
@@ -41,10 +44,7 @@ export function SignUp({
     if (regError) {
       console.error("Ошибка регистрации:", regError);
     }
-    if (regMessage?.success) {
-      setIsConfirm(true);
-    }
-  }, [regError, regMessage, setSign]);
+  }, [regError, setSign]);
   return (
     <div className={styles["reg-block"]}>
       {isLoading ? (

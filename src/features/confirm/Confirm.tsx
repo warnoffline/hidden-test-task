@@ -14,7 +14,7 @@ export function Confirm({
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const email = localStorage.getItem("email");
-  const { isLoading, confError, confMessage, resendError } = useAppSelector(
+  const { isLoading, confError, resendError } = useAppSelector(
     (state) => state.registrationReducer
   );
   const dispatch = useAppDispatch();
@@ -57,14 +57,12 @@ export function Confirm({
     },
   });
   const handleConfirmSubmit = async (value: ConfirmParams) => {
-    dispatch(confirmation(value.confirmation_code));
-  };
-  useEffect(() => {
-    if (confMessage?.success) {
-      setSign(true);
-      setConfirm(false);
+    const response = await dispatch(confirmation(value.confirmation_code));
+    if(response.meta.requestStatus === 'fulfilled'){
+      setSign(true)
+      setConfirm(false)
     }
-  }, [confMessage, setSign, setConfirm]);
+  };
   return (
     <form
       onSubmit={form.onSubmit((value) => handleConfirmSubmit(value))}

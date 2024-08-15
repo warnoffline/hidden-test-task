@@ -14,7 +14,7 @@ export const getUserDetails = (user: User | null) => {
         },
         { label: "Номер телефона", value: user?.phone || "Не добавлен" },
         {
-          label: "Номер подтверждена",
+          label: "Номер подтверждён",
           value: user?.phone_verified ? "Подтверждён" : "Не подтверждён",
         },
         {
