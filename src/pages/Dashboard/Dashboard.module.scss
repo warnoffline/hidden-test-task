@@ -14,8 +14,9 @@
         align-items: center;
     }
     &__body{
-        height: 70%;
-        width: 50%;
+        width: 60%;
+        height: 600px;
+        max-height: 100%;
         background-color: #fff;
         box-shadow: 0px 0px 5px 0px #00000020;
         padding: 20px;
@@ -49,21 +50,8 @@
         }
     }
 }
-@media (max-width: 1400px) and (min-width: 1001px) {
-    .dashboard{
-        &__body{
-            width: 70%;
-        }
-    }
-}
-@media (max-width: 1000px) and (min-width: 701px) {
-    .dashboard{
-        &__body{
-            width: 80%;
-        }
-    }   
-}
-@media (max-width: 700px) and (min-width: 501px) {
+
+@media (max-width: 1400px) and (min-width: 501px) {
     .dashboard{
         height: 100%;
         &__body{
@@ -71,14 +59,14 @@
         }
     }   
 }
+
 @media (max-width: 500px) and (min-width: 300px) {
     .dashboard{
         height: 100%;
+        align-items: end;
         &__body{
             width: 100%;
             border-radius: 8px 8px 0 0;
-            position: absolute;
-            bottom: 0;
             &--avatar{
                 display: block;
                 background-color: #fff;

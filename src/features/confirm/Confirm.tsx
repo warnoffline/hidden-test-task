@@ -1,4 +1,4 @@
-import { TextInput, Button, Loader } from "@mantine/core";
+import { TextInput, Button, Loader, Text } from "@mantine/core";
 import styles from "./Confirm.module.scss";
 import { confirmation } from "@/entities/Registration/actions";
 import { resendCode } from "@/entities/Registration/actions";
@@ -14,7 +14,7 @@ export function Confirm({
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const email = localStorage.getItem("email");
-  const { isLoading, confError, resendError } = useAppSelector(
+  const { isLoading, confError, resendError, resendIsLoading } = useAppSelector(
     (state) => state.registrationReducer
   );
   const dispatch = useAppDispatch();
@@ -77,19 +77,19 @@ export function Confirm({
           <div className={styles["confirm-form__body--header"]}>
             <span>Подтверждение кода</span>
           </div>
+          <Text color="red">{confError}</Text>
           <TextInput
             label="Код из письма"
             placeholder="Введите код"
             key={form.key("confirmation_code")}
             {...form.getInputProps("confirmation_code")}
-            error={confError}
           />
           <div className={styles["confirm-form__body--buttons"]}>
             <Button type="submit" color="#3182CE">
               Отправить
             </Button>
             <Button
-              disabled={resendDisabled}
+              disabled={resendDisabled || resendIsLoading}
               onClick={() => handleResendCode()}
               variant="outline"
               color={resendError !== "" ? "red" : ""}
@@ -98,6 +98,8 @@ export function Confirm({
                 ? `Отправить повторно ${resendTimer} сек.`
                 : resendError !== ""
                 ? resendError
+                : resendIsLoading 
+                ? <Loader color="blue" type="dots" />
                 : "Отправить повторно"}
             </Button>
           </div>

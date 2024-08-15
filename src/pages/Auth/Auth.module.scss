@@ -5,6 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;  
 }
 
 @media (max-width: 500px) and (min-width: 300px) {

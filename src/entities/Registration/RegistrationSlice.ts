@@ -4,6 +4,7 @@ import { registration, confirmation, resendCode } from './actions'
 
 type registrationState = {
     isLoading: boolean;
+    resendIsLoading: boolean;
     regError: string;
     confError: string;
     resendError: string;
@@ -14,6 +15,7 @@ type registrationState = {
 
 const initialState: registrationState = {
     isLoading: false,
+    resendIsLoading: false,
     regError: '',
     confError: '',
     resendError: '',
@@ -68,7 +70,11 @@ export const registrationSlice = createSlice({
             state.confMessage = action.payload;
         })
 
+        .addCase(resendCode.pending, (state) => {
+            state.resendIsLoading = true;
+        })
         .addCase(resendCode.rejected, (state, action) => {
+            state.resendIsLoading = false;
             if(action.payload === 422){
                 state.resendError = 'Неправильные данные';
             }
@@ -80,6 +86,7 @@ export const registrationSlice = createSlice({
             }
         })  
         .addCase(resendCode.fulfilled, (state, action) => {
+            state.resendIsLoading = false;
             state.resendMessage = action.payload;
         })
     }
